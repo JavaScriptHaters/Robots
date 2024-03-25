@@ -17,4 +17,10 @@ public class GameWindow extends JInternalFrame
         getContentPane().add(panel);
         pack();
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        m_visualizer.stopTimer();
+    }
 }

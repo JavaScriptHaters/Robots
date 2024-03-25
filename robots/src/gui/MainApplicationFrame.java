@@ -169,7 +169,10 @@ public class MainApplicationFrame extends JFrame
                         JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 // Закрыть окно? Подтверждение
                 if (confirmed == JOptionPane.YES_OPTION) {
-                    setDefaultCloseOperation(EXIT_ON_CLOSE); // DISPOSE_ON_CLOSE
+                    for (var frame : desktopPane.getAllFrames()) {
+                        frame.dispose();
+                    }
+                    dispose();
                 }
             }
         });
