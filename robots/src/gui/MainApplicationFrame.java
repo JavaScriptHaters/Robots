@@ -141,6 +141,13 @@ public class MainApplicationFrame extends JFrame
             return exitMenu;
         }
     }
+
+    private void saveWindows() {
+        for (var frame : desktopPane.getAllFrames()) {
+            if (frame instanceof IFrameState)
+                ((IFrameState) frame).saveWindow();
+        }
+    }
     
     public MainApplicationFrame() {
         //Make the big window be indented 50 pixels from each edge
@@ -158,6 +165,10 @@ public class MainApplicationFrame extends JFrame
         addWindow(new GameWindow(bundle.getString("gameWindow.title")),
                 400, 400);
 
+        for (var frame : desktopPane.getAllFrames())
+            if (frame instanceof IFrameState)
+                ((IFrameState) frame).closeWindow();
+
         setJMenuBar(new WindowMenu());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Object[] options = { bundle.getString("confirm.yes"), bundle.getString("confirm.no") }; // Да, Нет
@@ -170,6 +181,8 @@ public class MainApplicationFrame extends JFrame
                 // Закрыть окно? Подтверждение
                 if (confirmed == JOptionPane.YES_OPTION) {
                     for (var frame : desktopPane.getAllFrames()) {
+                        if (frame instanceof IFrameState)
+                            ((IFrameState) frame).saveWindow();
                         frame.dispose();
                     }
                     dispose();
