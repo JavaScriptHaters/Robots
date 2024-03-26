@@ -120,7 +120,9 @@ public class GameVisualizer extends JPanel
             return max;
         return value;
     }
-    
+    public void stopTimer(){
+        m_timer.cancel();
+    }
     private void moveRobot(double velocity, double angularVelocity, double duration)
     {
         velocity = applyLimits(velocity, 0, maxVelocity);
