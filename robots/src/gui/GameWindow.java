@@ -2,10 +2,9 @@ package gui;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
-public class GameWindow extends JInternalFrame
+public class GameWindow extends AbstractWindowState
 {
     private final GameVisualizer m_visualizer;
     public GameWindow(String title)

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -47,6 +48,7 @@ public class MainApplicationFrame extends JFrame
             add(createLookAndFeelMenu());
             add(createTestMenu());
             add(createSwitchLanguage());
+            add(createSaveMenu());
             add(createExitMenu());
         }
 
@@ -127,6 +129,16 @@ public class MainApplicationFrame extends JFrame
             return testMenu;
         }
 
+        private JMenu createSaveMenu(){
+            JMenu saveMenu = createJMenu(bundle.getString("saveMenu.s"),
+                    KeyEvent.VK_M,
+                    bundle.getString("saveMenu.getAccessibleContext"));
+            saveMenu.add(createJMenuItem(bundle.getString("saveMenu.s"),
+                    KeyEvent.VK_Q,
+                    e -> MainApplicationFrame.this.saveWindows()));
+            return saveMenu;
+        }
+
         private JMenu createExitMenu(){
             JMenu exitMenu = createJMenu(bundle.getString("exitMenu.s"), // Выход
                     KeyEvent.VK_Q,
@@ -139,6 +151,13 @@ public class MainApplicationFrame extends JFrame
                                     MainApplicationFrame.this, WindowEvent.WINDOW_CLOSING))));
 
             return exitMenu;
+        }
+    }
+
+    private void saveWindows() {
+        for (var frame : desktopPane.getAllFrames()) {
+            if (frame instanceof IFrameState)
+                ((IFrameState) frame).saveWindow();
         }
     }
     
@@ -158,6 +177,10 @@ public class MainApplicationFrame extends JFrame
         addWindow(new GameWindow(bundle.getString("gameWindow.title")),
                 400, 400);
 
+        for (var frame : desktopPane.getAllFrames())
+            if (frame instanceof IFrameState)
+                ((IFrameState) frame).closeWindow();
+
         setJMenuBar(new WindowMenu());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Object[] options = { bundle.getString("confirm.yes"), bundle.getString("confirm.no") }; // Да, Нет
@@ -169,9 +192,14 @@ public class MainApplicationFrame extends JFrame
                         JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 // Закрыть окно? Подтверждение
                 if (confirmed == JOptionPane.YES_OPTION) {
-                    for (var frame : desktopPane.getAllFrames()) {
-                        frame.dispose();
+                    int confirm = JOptionPane.showOptionDialog(MainApplicationFrame.this, bundle.getString("save.message"),
+                            bundle.getString("saveMenu.s"), JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        saveWindows();
                     }
+                    setVisible(false);
+                    Arrays.asList(desktopPane.getAllFrames()).forEach(JInternalFrame::dispose);
                     dispose();
                 }
             }
