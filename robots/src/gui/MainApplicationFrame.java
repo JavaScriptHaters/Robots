@@ -172,9 +172,11 @@ public class MainApplicationFrame extends JFrame
 
         setContentPane(desktopPane);
 
+        var robot = new Robot(10, 10);
+        addWindow(new RobotInfo(robot), 300, 300);
 
         addWindow(createLogWindow());
-        addWindow(new GameWindow(bundle.getString("gameWindow.title")),
+        addWindow(new GameWindow(bundle.getString("gameWindow.title"), robot),
                 400, 400);
 
         for (var frame : desktopPane.getAllFrames())
