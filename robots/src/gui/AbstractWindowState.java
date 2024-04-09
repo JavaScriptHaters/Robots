@@ -16,6 +16,10 @@ public abstract class AbstractWindowState extends JInternalFrame implements IFra
         super(string, b1, b2, b3, b4);
     }
 
+    public AbstractWindowState() {
+        super();
+    }
+
     private static Preferences getPreferences() {
         return Preferences.userRoot().node(prefixWindowPreferences);
     }
