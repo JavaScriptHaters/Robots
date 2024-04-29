@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.*;
 
+import game.GameWindow;
+import game.RobotLogic;
 import log.Logger;
 
 /**
@@ -172,9 +174,11 @@ public class MainApplicationFrame extends JFrame
 
         setContentPane(desktopPane);
 
+        var logic = new RobotLogic();
+        addWindow(new game.RobotInfo(logic), 300, 300);
 
         addWindow(createLogWindow());
-        addWindow(new GameWindow(bundle.getString("gameWindow.title")),
+        addWindow(new GameWindow(bundle.getString("gameWindow.title"), logic),
                 400, 400);
 
         for (var frame : desktopPane.getAllFrames())
@@ -205,7 +209,7 @@ public class MainApplicationFrame extends JFrame
             }
         });
     }
-    
+
     protected LogWindow createLogWindow()
     {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), bundle.getString("logWindow.title"));
